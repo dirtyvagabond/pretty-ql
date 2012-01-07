@@ -6,6 +6,7 @@
 ;; --- pretty helpers ---
 
 ;; assumes s always like "term*"
+;; PS: Laura says: iloveyou
 (defn like-str->m [s]
   {:$bw (apply str (butlast s))})
 
@@ -89,16 +90,26 @@
 (defn offset [q offset]
   (assoc q :offset offset))
 
-(defn +circle
-  "Expects a circle like:
+(defn circle
+  "Adds a geo proximity filter to query q.
+   Expects a hash-map describing a circle, like:
     {:center [40.73 -74.01]
      :meters 5000}
 
    Supports one of :miles or :meters"
-  [q circle]
-  (let [meters (get circle :meters (* (:miles circle) 1609.344))
-        c {:$center (:center circle) :$meters meters}]
-    (assoc q :geo {:$circle c})))
+  [q circ]
+  (let [meters (or (:meters circ) (* (:miles circ) 1609.344))
+        center {:$center (:center circ) :$meters meters}]
+    (assoc q :geo {:$circle center})))
+
+(defn around
+  "Adds a geo proximity filter to query q.
+   Expects a hash-map describing a circle, like:
+   {:lat 34.06021 :lon -118.4183 :miles 3}
+  
+   Only supports :miles"
+  [q {:keys [lat lon miles]}]
+  (circle q {:center [lat lon] :miles miles}))
 
 ;; --- pretty DSL ---
 
@@ -128,4 +139,4 @@
 
 (defmacro select [table & clauses]
   `(let [query# (-> (select* ~(name table)) ~@clauses)]
-       (exec query#)))
+     (exec query#)))
