@@ -23,14 +23,24 @@
   [pred-name]
   `#(hash-map %1 {~pred-name %2}))
 
-;; --- where predicate translation table ---
+;; --- pretty fn translation tables ---
+
+(def keywords
+  {'where 'pretty.core/where
+   'fields 'pretty.core/fields
+   'order 'pretty.core/order
+   'search 'pretty.core/search
+   'offset 'pretty.core/offset
+   'limit 'pretty.core/limit
+   'circle 'pretty.core/circle
+   'around 'pretty.core/around})
 
 (def preds {'and 'pretty.core/+and  
             'or 'pretty.core/+or
             'search 'pretty.core/+search
             'like 'pretty.core/+like
             'not-like 'pretty.core/+not-like
-            'blank 'pretty.core/+blank
+            'BLANK 'pretty.core/+blank
             'not-blank 'pretty.core/+not-blank
             '= (pred :$eq)
             'not= (pred :$neq)
@@ -132,11 +142,11 @@
   [query clause]
   (update-in query [:filters] conj clause))
 
-
 (defmacro where [query & clauses]
   (let [xform (walk/postwalk-replace preds clauses)]
     `(update-in ~query [:filters] merge ~@xform)))
 
 (defmacro select [table & clauses]
-  `(let [query# (-> (select* ~(name table)) ~@clauses)]
-     (exec query#)))
+  (let [xform (walk/postwalk-replace keywords clauses)]
+    `(let [query# (-> (select* ~(name table)) ~@xform)]
+       (exec query#))))
