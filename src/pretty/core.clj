@@ -1,7 +1,7 @@
 (ns pretty.core
-  (:require [funnyplaces.api :as fun])
-  (use [clojure.walk :as walk])
-  (use [clojure.string :only (join)]))
+  (:require [funnyplaces.api :as fun]
+            [clojure.walk :as walk]
+            [clojure.string :as str]))
 
 ;; --- pretty helpers ---
 
@@ -22,15 +22,7 @@
   [pred-name]
   `#(hash-map %1 {~pred-name %2}))
 
-;; --- translation tables ---
-
-(def keywords
-  {'where 'pretty.core/where
-   'fields 'pretty.core/+fields
-   'order 'pretty.core/+order
-   'search 'pretty.core/+search
-   'offset 'pretty.core/+offset
-   'limit 'pretty.core/+limit})
+;; --- where predicate translation table ---
 
 (def preds {'and 'pretty.core/+and  
             'or 'pretty.core/+or
@@ -50,13 +42,13 @@
 
 ;; --- pretty fns ---
 
-(defn +fields [q & forms]
+(defn fields [q & forms]
   ;;;(update-in q [:select] into (map name forms))
-  (assoc q :select (join "," (map name forms)))
+  (assoc q :select (str/join "," (map name forms)))
   )
 
-(defn +order [q & forms]
-  (assoc q :sort (join "," (map name forms))))
+(defn order [q & forms]
+  (assoc q :sort (str/join "," (map name forms))))
 
 (defn +or [& clauses]
   {:$or (vec clauses)})
@@ -64,7 +56,7 @@
 (defn +and [& clauses]
   {:$and (vec clauses)})
 
-(defn +search
+(defn search
   "Supports 2 variants of full text search:
 
    1) At top level of query, so FTS across row, like:
@@ -91,10 +83,10 @@
 (defn +not-blank [field]
   {field {:$blank false}})
 
-(defn +limit [q limit]
+(defn limit [q limit]
   (assoc q :limit limit))
 
-(defn +offset [q offset]
+(defn offset [q offset]
   (assoc q :offset offset))
 
 (defn +circle
@@ -108,7 +100,7 @@
         c {:$center (:center circle) :$meters meters}]
     (assoc q :geo {:$circle c})))
 
-;; --- end pretty fns ---
+;; --- pretty DSL ---
 
 (defn pretty! [key secret]
   (fun/factual! key secret))
@@ -135,6 +127,5 @@
     `(update-in ~query [:filters] merge ~@xform)))
 
 (defmacro select [table & clauses]
-  (let [xform (walk/postwalk-replace keywords clauses)]
-    `(let [query# (-> (select* ~(name table)) ~@xform)]
-       (exec query#))))
+  `(let [query# (-> (select* ~(name table)) ~@clauses)]
+       (exec query#)))
