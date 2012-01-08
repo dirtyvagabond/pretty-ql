@@ -89,6 +89,67 @@ The <tt>where</tt> clause allows you to specify row filters. Here's an example P
 * >=
 * <=
 
+# fields
+
+You can specify the fields you want returned using <tt>fields</tt>, like this:
+
+````clojure
+(select places
+  (fields :name :locality :website))
+````
+
+# order
+
+You can order your results, that is sort rows, by using <tt>order</tt>. For example:
+
+````clojure
+(select places
+  (order :name))
+````
+
+Example of ordering by name ascending, locality descending, using explicit :asc and :desc modifiers:
+
+````clojure
+(select places
+  (order :name:asc :locality:desc))
+````
+
+# search (Full Text Search)
+
+Example:
+
+````clojure
+(select places
+  (search "starbucks"))
+````
+
+# limit and offset
+
+You can limit the returned results with <tt>limit</tt>, like:
+
+````clojure
+(select restaurants-us (limit 12))
+````
+
+You can page through results using <tt>order</tt>, <tt>limit</tt> and <tt>offset</tt>, like:
+
+````clojure
+(select places
+  (order :name:asc :locality:desc)
+  (offset 20)
+  (limit 10))
+````
+
+# around (Geo Proximity Filter)
+
+You can use <tt>around</tt> to limit your results to be within a geographic radius of a lat lon coordinate. For example:
+
+````clojure
+; Find places near Factual:
+(select places
+  (around {:lat 34.06021 :lon -118.4183 :miles 3}))
+````
+
 # Query Composition
 
 Pretty provides support for composing queries. You can define a query without running it, using <tt>select*</tt>. Later you can create new queries based on that query, and run them at anytime.
@@ -117,7 +178,11 @@ But you can also define a new query that builds off of <tt>base</tt>. For exampl
                   (order :website)))
 ````
 
-You can run the <tt>websites</tt> query anytime with <tt>exec</tt>.
+You can run the <tt>websites</tt> query anytime with <tt>exec</tt>:
+
+````clojure
+(exec websites)
+````
 
 You can go on to create a new query that is is similar to the <tt>websites</tt> query but, say, adds a limit clause:
 
