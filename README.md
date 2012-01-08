@@ -28,22 +28,75 @@ Now you can use Pretty on the REPL:
 (use 'pretty-ql.core)
 ````
 
-Or in your project:
+Or in your ns declaration:
 
 ````clojure
-(ns your-ns
-  ...
-  (require [pretty-ql.core :as pretty])
-  ...)
+(require [pretty-ql.core :as pretty])
 ````
+
+# Authentication
+
+Before your Pretty queries can run, you must provide your Factual API key and secret:
+
+````clojure
+(pretty! "YOUR-KEY" "YOUR-SECRET")
+````
+
+# select
+
+<tt>select</tt> takes a table name and an optional set of clauses, such as a <tt>where</tt> clause. <tt></tt> will run this query against Factual and return a sequence of results hash-maps.
+
+The simplest example:
+
+````clojure
+(select places)
+````
+
+Another simple example:
+
+````clojure
+(select :places (where (like :name "starbucks*")))
+````
+
+# where
+
+The <tt>where</tt> clause allows you to specify row filters. Here's an example Pretty statement with a tasty <tt>where</tt> clause:
+
+````clojure
+; Find restaurants in LA with valid websites and a good rating,
+; that won't make me dress too nice:
+(select restaurants-us
+  (where
+    (= :locality "los angeles")
+    (not-in :attire ["formal" "smart casual" "business casual"])
+    (not-blank :website)
+    (>= :rating 2.5)))
+````
+
+## supported filter logic
+
+* in
+* not-in
+* like
+* not-like
+* search
+* blank
+* not-blank
+* =
+* not=
+* >
+* <
+* >=
+* <=
 
 # Query Composition
 
-Pretty provides support for composing queries. For example, imagine you want to define a base query that finds U.S. restaurants that have valid owners and telephones:
+Pretty provides support for composing queries. You can define a query without running it, using <tt>select*</tt>. Later you can create new queries based on that query, and run them at anytime.
+
+For example, imagine you want to define a base query that finds U.S. restaurants that have valid owners and telephones:
 
 ````clojure
 (def base (-> (select* "restaurants-us")
-              (fields :name :owner :tel)
               (where
                 (not-blank :owner)
                 (not-blank :tel))))
@@ -55,32 +108,23 @@ Running that query is as easy as using <tt>exec</tt>:
 (exec base)
 ````
 
-But you can also define a new query that adds to <tt>base</tt>. For example, let's define a new query that uses <tt>base</tt> but adds a filter for non-null websites, and also adds a sort based on website:
+But you can also define a new query that builds off of <tt>base</tt>. For example, let's define a new query that uses <tt>base</tt> but adds a filter for non-null websites, and also adds a sort based on website:
 
 ````clojure
-(def websites
-  (-> base
-    (where 
-      (not-blank :website))
-    (order :website)))
+(def websites (-> base
+                (where 
+                  (not-blank :website))
+                  (order :website)))
 ````
 
-Now you can run the <tt>websites</tt> query if you want...
+You can run the <tt>websites</tt> query anytime with <tt>exec</tt>.
 
-````clojure
-(exec websites)
-````
-
-... and you can go on to create a new query that uses websites but, say, adds a limit clause:
+You can go on to create a new query that is is similar to the <tt>websites</tt> query but, say, adds a limit clause:
 
 ````clojure
 (def a-few-sites (-> websites (limit 3)))
 ````
 
-You can run that at anytime:
-
-````clojure
-(exec a-few-sites)
-````
+And of course, you can run that at anytime with <tt>exec</tt>.
 
 And the previous <tt>base</tt> and <tt>websites</tt> queries are unchanged, so you can continuing building new queries off of them as well.
