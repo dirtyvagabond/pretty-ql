@@ -25,13 +25,13 @@ PrettyQL is hosted at [Clojars](http://clojars.org/pretty-ql). Add this to your 
 Now you can use Pretty on the REPL:
 
 ````clojure
-(use 'pretty-ql.core)
+(use 'pretty.core)
 ````
 
 Or in your ns declaration:
 
 ````clojure
-(require [pretty-ql.core :as pretty])
+(require [pretty.core :as pretty])
 ````
 
 # Authentication
