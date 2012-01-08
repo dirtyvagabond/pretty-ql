@@ -1,6 +1,6 @@
 # About
 
-PrettyQL is a domain specific language for working with Factual's public API. It is similar to SQL... except it's a Lisp.
+PrettyQL is a Clojure DSL for Factual's API. It's for when you want to use the world's most powerful programming language to query the world's most powerful open data platform. ;-)
 
 Here's a Pretty statement that finds restaurants near a lat lon, where each restaurant delivers dinner, sorted by distance:
 
@@ -44,7 +44,7 @@ Before your Pretty queries can run, you must provide your Factual API key and se
 
 # select
 
-<tt>select</tt> takes a table name and an optional set of clauses, such as a <tt>where</tt> clause. <tt></tt> will run this query against Factual and return a sequence of results hash-maps.
+<tt>select</tt> takes a table name and an optional set of clauses, such as a <tt>where</tt> clause. Evaluating <tt>select</tt> will run the query against Factual and return a sequence of results hash-maps.
 
 The simplest example:
 
