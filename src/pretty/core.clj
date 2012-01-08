@@ -40,7 +40,7 @@
             'search 'pretty.core/+search
             'like 'pretty.core/+like
             'not-like 'pretty.core/+not-like
-            'BLANK 'pretty.core/+blank
+            'blank 'pretty.core/+blank
             'not-blank 'pretty.core/+not-blank
             '= (pred :$eq)
             'not= (pred :$neq)
