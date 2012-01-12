@@ -37,7 +37,7 @@
 
 (def preds {'and 'pretty.core/+and  
             'or 'pretty.core/+or
-            'search 'pretty.core/+search
+            'search 'pretty.core/search
             'like 'pretty.core/+like
             'not-like 'pretty.core/+not-like
             'blank 'pretty.core/+blank
