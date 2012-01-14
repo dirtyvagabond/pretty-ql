@@ -150,3 +150,6 @@
   (let [xform (walk/postwalk-replace keywords clauses)]
     `(let [query# (-> (select* ~(name table)) ~@xform)]
        (exec query#))))
+
+(defmacro schema [table]
+  `(fun/schema ~(name table)))

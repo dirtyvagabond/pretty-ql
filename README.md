@@ -150,6 +150,14 @@ You can use <tt>around</tt> to limit your results to be within a geographic radi
   (around {:lat 34.06021 :lon -118.4183 :miles 3}))
 ````
 
+# Schema
+
+You can get the schema for a specific table like this:
+
+````clojure
+(schema restaurants-us)
+````
+
 # Query Composition
 
 Pretty provides support for composing queries. You can define a query without running it, using <tt>select*</tt>. Later you can create new queries based on that query, and run them at anytime.
