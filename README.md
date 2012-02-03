@@ -210,5 +210,5 @@ PrettyQL provides simple and direct support for Factual's Resolve feature. The f
 For example:
 
 ````clojure
-(resolve {"name" "ino", "latitude" 40.73, "longitude" -74.01})
+(resolve {:name :ino, :latitude 40.73, :longitude -74.01})
 ````
