@@ -153,3 +153,10 @@
 
 (defmacro schema [table]
   `(fun/schema ~(name table)))
+
+(defn resolve
+  "Direct support for Resolve. values must be a hashmap, where keys
+   are valid attributes for the schema, and values are the values on
+   which to match."
+  [values]
+  (fun/resolve values))

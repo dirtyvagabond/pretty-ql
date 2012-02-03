@@ -201,3 +201,14 @@ You can go on to create a new query that is is similar to the <tt>websites</tt> 
 And of course, you can run that at anytime with <tt>exec</tt>.
 
 And the previous <tt>base</tt> and <tt>websites</tt> queries are unchanged, so you can continuing building new queries off of them as well.
+
+
+# Resolve
+
+PrettyQL provides simple and direct support for Factual's Resolve feature. The function is called <tt>resolve</tt>, and it expects values as a hashmap, where keys are valid attributes for the Resolve schema, and values are the values on which to match.
+
+For example:
+
+````clojure
+(resolve {"name" "ino", "latitude" 40.73, "longitude" -74.01})
+````
