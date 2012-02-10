@@ -55,7 +55,7 @@ The simplest example:
 Another simple example:
 
 ````clojure
-(select :places (where (like :name "starbucks*")))
+(select places (where (like :name "starbucks*")))
 ````
 
 # where
