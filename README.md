@@ -19,7 +19,7 @@ Here's a Pretty statement that finds restaurants near a lat lon, where each rest
 PrettyQL is hosted at [Clojars](http://clojars.org/pretty-ql). Add this to your project dependencies:
 
 ````clojure
-[pretty-ql "1.0.3"]
+[pretty-ql "1.0.4"]
 ````
 
 Now you can use Pretty on the REPL:
@@ -39,7 +39,7 @@ Or in your ns declaration:
 Before your Pretty queries can run, you must provide your Factual API key and secret:
 
 ````clojure
-(pretty! "YOUR-KEY" "YOUR-SECRET")
+(init! "YOUR-KEY" "YOUR-SECRET")
 ````
 
 # select
