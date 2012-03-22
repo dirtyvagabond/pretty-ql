@@ -125,7 +125,7 @@
 
 (defn init!
   "Establishes your oauth credentials for Factual. You only need to
-   this once for the lifetime of your application."
+   do this once for the lifetime of your application."
   [key secret]
   (fun/factual! key secret))
 
