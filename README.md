@@ -89,6 +89,25 @@ The <tt>where</tt> clause allows you to specify row filters. Here's an example P
 * >=
 * <=
 
+### example filter queries
+
+````clojure
+;; Select places whose name field starts with "starbucks"
+(select places (where (like :name "starbucks*")))
+````
+
+````clojure
+;; Select U.S. restaurants with a blank telephone number
+(select restaurants-us (where (blank :tel)))
+````
+
+````clojure
+;; Select places that are in the states of CA, NV, or TX
+(select places
+  (where
+    (in :region ["CA" "NV" "TX"])))
+````
+
 # fields
 
 You can specify the fields you want returned using <tt>fields</tt>, like this:
