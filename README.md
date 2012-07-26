@@ -1,3 +1,5 @@
+# THIS HAS MOVED to github.com/dirtyvagabond/factql
+
 # About
 
 PrettyQL is a Clojure DSL for Factual's API. It's for when you want to use the world's most powerful programming language to query the world's most powerful open data platform. ;-)
