@@ -1,4 +1,4 @@
-# THIS HAS MOVED to github.com/dirtyvagabond/factql
+# THIS HAS MOVED to https://github.com/dirtyvagabond/factql
 
 # About
 
